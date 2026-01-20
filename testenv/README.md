@@ -9,6 +9,7 @@ go run ./testenv/cmd/mockenv
 ```
 
 Defaults:
+
 - HTTP: 127.0.0.1:8080
 - HTTPS: 127.0.0.1:8443
 - RAW TCP: 127.0.0.1:5666
@@ -46,8 +47,33 @@ go run ./Scratch/cmd/main.go -d local.test -w ./testenv/wordlist.txt -hosts ./te
 
 `-hosts` format is one host per line:
 
-```
+```text
 host ip1 [ip2...]
 ```
 
 Use `-offline` to skip external DNS/CT/SPF lookups during testing.
+
+## Scratch -> Knock (-ip pipe test)
+
+This uses a minimal hosts/wordlist pair that resolves only to `127.0.0.1` and
+pipes Scratch output into Knock.
+
+```sh
+make scratch-knock-ip
+```
+
+## Scratch -> Knock -> Inspect (full pipeline)
+
+This runs the full recon chain from Scratch into Knock into Inspect.
+
+```sh
+make scratch-knock-inspect
+```
+
+## All tools (single run)
+
+This runs Knock, Inspect, and Scratch against the mock services.
+
+```sh
+make test-all
+```

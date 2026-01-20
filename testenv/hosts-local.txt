@@ -1,0 +1,2 @@
+# host ip1 [ip2...]
+www.local.test 127.0.0.1
