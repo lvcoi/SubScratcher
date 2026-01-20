@@ -73,6 +73,7 @@ func main() {
 
 	startTime = time.Now()
 	rand.Seed(time.Now().UnixNano())
+	stdoutIsTTY := isTerminal(os.Stdout)
 
 	var input []string
 	if *target != "" {
@@ -101,7 +102,9 @@ func main() {
 	}
 
 	// 1. CLEAN THE SCREEN ONCE
-	fmt.Print("\033[2J\033[H")
+	if stdoutIsTTY {
+		fmt.Print("\033[2J\033[H")
+	}
 
 	var wg sync.WaitGroup
 	sem := make(chan struct{}, 15)
@@ -146,7 +149,11 @@ func main() {
 	wg.Wait()
 
 	// Finalize: move cursor past footer
-	fmt.Print("\033[999;1H\n\n")
+	if stdoutIsTTY {
+		fmt.Print("\033[999;1H\n\n")
+	} else {
+		fmt.Println()
+	}
 	fmt.Printf("\033[32m[+] Scan Complete. Results in inspector_findings.log\033[0m\n")
 }
 
@@ -263,4 +270,12 @@ func cleanBanner(data []byte) string {
 		}
 	}
 	return strings.TrimSpace(string(result))
+}
+
+func isTerminal(f *os.File) bool {
+	info, err := f.Stat()
+	if err != nil {
+		return false
+	}
+	return (info.Mode() & os.ModeCharDevice) != 0
 }
