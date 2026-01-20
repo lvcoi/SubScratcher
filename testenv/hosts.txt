@@ -1,0 +1,6 @@
+# host ip1 [ip2...]
+www.local.test 127.0.0.1
+api.local.test 127.0.0.1
+origin.local.test 192.0.2.10
+cdn.local.test 104.16.0.1
+dev.local.test 127.0.0.1
